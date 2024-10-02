@@ -1,5 +1,5 @@
 function countdown(){
-    let theDate = new Date('Dec 31, 2022 11:00:00').getTime()
+    let theDate = new Date('2024-11-02T00:00:00').getTime()
     
     let x = setInterval(function () {
         let now = new Date().getTime();
