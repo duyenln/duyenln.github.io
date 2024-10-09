@@ -176,7 +176,7 @@ function set_width() {
         }
     });
 </script>
-<body data-spy="scroll" data-target=".navbar" data-offset="51">
+<body id="bodyid" data-spy="scroll" data-target=".navbar" data-offset="51">
     
     <audio autoplay="autoplay" loop muted id="myAudio">   
              <source src="statics/Nhac.mp3" /> 
@@ -600,8 +600,7 @@ function set_width() {
                 }
             });
 
-            var touchArea = document.body;
-
+            var touchArea = document.getElementById("bodyid");
             // Sự kiện khi chạm vào khu vực
             touchArea.addEventListener("touchstart", function(e) {
 
