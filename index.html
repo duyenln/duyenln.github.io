@@ -166,8 +166,15 @@ function set_width() {
 }
 // ]]>
 </script>
+
 <body data-spy="scroll" data-target=".navbar" data-offset="51">
-    <audio controls  src="statics/Nhac.mp3" autoplay loop ></audio>
+    
+    <audio autoplay="autoplay" loop >
+             <source src="statics/music.ogg" /> 
+             <source src="tatics/Nhac.mp3" />   
+             <source src="tatics/Nhac.mp3" /> 
+             <source src="statics/Nhac1.mp3" /> 
+    </audio>
     <!-- Navbar Start -->
     <nav class="navbar fixed-top shadow-sm navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-lg-5">
         
@@ -578,6 +585,11 @@ function set_width() {
           }
         }, 1000);
       </script>
+
+        <script>
+            var myaudio = document.getElementById("divAudio").autoplay = true;
+        </script>
+
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
