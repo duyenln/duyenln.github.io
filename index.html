@@ -166,14 +166,20 @@ function set_width() {
 }
 // ]]>
 </script>
-
+<script>
+    // Sự kiện nhấp chuột để bật âm thanh
+    document.body.addEventListener('click', function() {
+        var audio = document.getElementById("myAudio");
+        if (audio.muted) {
+            audio.muted = false; // Bỏ chế độ im lặng
+            audio.play();        // Tiếp tục phát audio
+        }
+    });
+</script>
 <body data-spy="scroll" data-target=".navbar" data-offset="51">
     
-    <audio autoplay="autoplay" loop >
-             <source src="statics/music.ogg" /> 
-             <source src="tatics/Nhac.mp3" />   
-             <source src="tatics/Nhac.mp3" /> 
-             <source src="statics/Nhac1.mp3" /> 
+    <audio autoplay="autoplay" loop muted id="myAudio">   
+             <source src="statics/Nhac.mp3" /> 
     </audio>
     <!-- Navbar Start -->
     <nav class="navbar fixed-top shadow-sm navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-lg-5">
@@ -587,7 +593,14 @@ function set_width() {
       </script>
 
         <script>
-            var myaudio = document.getElementById("divAudio").autoplay = true;
+            // Sự kiện nhấp chuột để bật âm thanh
+            document.body.addEventListener('click', function() {
+                var audio = document.getElementById("myAudio");
+                if (audio.muted) {
+                    audio.muted = false; // Bỏ chế độ im lặng
+                    audio.play();        // Tiếp tục phát audio
+                }
+            });
         </script>
 
     <!-- JavaScript Libraries -->
