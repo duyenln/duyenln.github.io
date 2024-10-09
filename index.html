@@ -166,16 +166,6 @@ function set_width() {
 }
 // ]]>
 </script>
-<script>
-    // Sự kiện nhấp chuột để bật âm thanh
-    document.body.addEventListener('click', function() {
-        var audio = document.getElementById("myAudio");
-        if (audio.muted) {
-            audio.muted = false; // Bỏ chế độ im lặng
-            audio.play();        // Tiếp tục phát audio
-        }
-    });
-</script>
 <body id="bodyid" data-spy="scroll" data-target=".navbar" data-offset="51">
     
     <audio autoplay="autoplay" loop muted id="myAudio">   
