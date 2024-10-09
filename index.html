@@ -24,17 +24,158 @@
 
     <!-- Customized Bootstrap Stylesheet -->
 	<link href="statics/css/style.css" rel="stylesheet">
-    <script src="statics/js/sendmessage.js"></script>
+    <!--<script src="statics/js/sendmessage.js"></script>-->
 </head>
-
+<script type="text/javascript">
+    // <![CDATA[
+var bits=80; // how many bits
+var speed=33; // how fast - smaller is faster
+var bangs=5; // how many can be launched simultaneously (note that using too many can slow the script down)
+var colours=new Array("#03f", "#f03", "#0e0", "#93f", "#0cf", "#f93", "#f0c"); 
+// blue red green purple cyan orange pink
+/****************************
+* Fireworks Effect *
+*(c)2004-11 mf2fm web-design*
+* http://www.mf2fm.com/rv *
+* DON'T EDIT BELOW THIS BOX *
+****************************/
+var bangheight=new Array();
+var intensity=new Array();
+var colour=new Array();
+var Xpos=new Array();
+var Ypos=new Array();
+var dX=new Array();
+var dY=new Array();
+var stars=new Array();
+var decay=new Array();
+var swide=800;
+var shigh=600;
+var boddie;
+window.onload=function() { if (document.getElementById) {
+  var i;
+  boddie=document.createElement("div");
+  boddie.style.position="fixed";
+  boddie.style.top="0px";
+  boddie.style.left="0px";
+  boddie.style.overflow="visible";
+  boddie.style.width="1px";
+  boddie.style.height="1px";
+  boddie.style.backgroundColor="transparent";
+  document.body.appendChild(boddie);
+  set_width();
+  for (i=0; i<bangs; i++) {
+    write_fire(i);
+    launch(i);
+    setInterval('stepthrough('+i+')', speed);
+  }
+}}
+function write_fire(N) {
+  var i, rlef, rdow;
+  stars[N+'r']=createDiv('|', 12);
+  boddie.appendChild(stars[N+'r']);
+  for (i=bits*N; i<bits+bits*N; i++) {
+    stars[i]=createDiv('*', 13);
+    boddie.appendChild(stars[i]);
+  }
+}
+function createDiv(char, size) {
+  var div=document.createElement("div");
+  div.style.font=size+"px monospace";
+  div.style.position="absolute";
+  div.style.backgroundColor="transparent";
+  div.appendChild(document.createTextNode(char));
+  return (div);
+}
+function launch(N) {
+  colour[N]=Math.floor(Math.random()*colours.length);
+  Xpos[N+"r"]=swide*0.5;
+  Ypos[N+"r"]=shigh-5;
+  bangheight[N]=Math.round((0.5+Math.random())*shigh*0.4);
+  dX[N+"r"]=(Math.random()-0.5)*swide/bangheight[N];
+  if (dX[N+"r"]>1.25) stars[N+"r"].firstChild.nodeValue="/";
+  else if (dX[N+"r"]<-1.25) stars[N+"r"].firstChild.nodeValue="\\";
+  else stars[N+"r"].firstChild.nodeValue="|";
+  stars[N+"r"].style.color=colours[colour[N]];
+}
+function bang(N) {
+  var i, Z, A=0;
+  for (i=bits*N; i<bits+bits*N; i++) { 
+    Z=stars[i].style;
+    Z.left=Xpos[i]+"px";
+    Z.top=Ypos[i]+"px";
+    if (decay[i]) decay[i]--;
+    else A++;
+    if (decay[i]==15) Z.fontSize="7px";
+    else if (decay[i]==7) Z.fontSize="2px";
+    else if (decay[i]==1) Z.visibility="hidden";
+    Xpos[i]+=dX[i];
+    Ypos[i]+=(dY[i]+=1.25/intensity[N]);
+  }
+  if (A!=bits) setTimeout("bang("+N+")", speed);
+}
+function stepthrough(N) { 
+  var i, M, Z;
+  var oldx=Xpos[N+"r"];
+  var oldy=Ypos[N+"r"];
+  Xpos[N+"r"]+=dX[N+"r"];
+  Ypos[N+"r"]-=4;
+  if (Ypos[N+"r"]<bangheight[N]) {
+    M=Math.floor(Math.random()*3*colours.length);
+    intensity[N]=5+Math.random()*4;
+    for (i=N*bits; i<bits+bits*N; i++) {
+      Xpos[i]=Xpos[N+"r"];
+      Ypos[i]=Ypos[N+"r"];
+      dY[i]=(Math.random()-0.5)*intensity[N];
+      dX[i]=(Math.random()-0.5)*(intensity[N]-Math.abs(dY[i]))*1.25;
+      decay[i]=16+Math.floor(Math.random()*16);
+      Z=stars[i];
+      if (M<colours.length) Z.style.color=colours[i%2?colour[N]:M];
+      else if (M<2*colours.length) Z.style.color=colours[colour[N]];
+      else Z.style.color=colours[i%colours.length];
+      Z.style.fontSize="13px";
+      Z.style.visibility="visible";
+    }
+    bang(N);
+    launch(N);
+  }
+  stars[N+"r"].style.left=oldx+"px";
+  stars[N+"r"].style.top=oldy+"px";
+} 
+window.onresize=set_width;
+function set_width() {
+  var sw_min=999999;
+  var sh_min=999999;
+  if (document.documentElement && document.documentElement.clientWidth) {
+    if (document.documentElement.clientWidth>0) sw_min=document.documentElement.clientWidth;
+    if (document.documentElement.clientHeight>0) sh_min=document.documentElement.clientHeight;
+  }
+  if (typeof(self.innerWidth)!="undefined" && self.innerWidth) {
+    if (self.innerWidth>0 && self.innerWidth<sw_min) sw_min=self.innerWidth;
+    if (self.innerHeight>0 && self.innerHeight<sh_min) sh_min=self.innerHeight;
+  }
+  if (document.body.clientWidth) {
+    if (document.body.clientWidth>0 && document.body.clientWidth<sw_min) sw_min=document.body.clientWidth;
+    if (document.body.clientHeight>0 && document.body.clientHeight<sh_min) sh_min=document.body.clientHeight;
+  }
+  if (sw_min==999999 || sh_min==999999) {
+    sw_min=800;
+    sh_min=600;
+  }
+  swide=sw_min;
+  shigh=sh_min;
+}
+// ]]>
+</script>
 <body data-spy="scroll" data-target=".navbar" data-offset="51">
+    <audio src="statics/Nhac.mp3" autoplay loop>nhạc</audio>
     <!-- Navbar Start -->
     <nav class="navbar fixed-top shadow-sm navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-lg-5">
+        
         <a href="#" class="navbar-brand d-block d-lg-none">
             <h1 class="font-secondary text-white mb-n2">Ngân Duyễn <span class="text-primary">&</span> Thanh Xuân</h1>
         </a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span> 
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
             <div class="navbar-nav ml-auto py-0">
@@ -61,16 +202,25 @@
     <div class="container-fluid p-0 mb-5 pb-5" id="home">
         <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
             <div class="carousel-inner">
-                <div class="carousel-item position-relative active" style="height: 100vh; min-height: 400px;">
+                <div class="" style="height: 100vh; min-height: 400px;">
                     <img class="position-absolute w-100 h-100" src="statics//img/carousel-1.jpg" style="object-fit: cover;">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3" style="max-width: 1200px;">
                             <h1 class="display-1 font-secondary text-white mt-n3 mb-md-4">Ngân Duyễn & Thanh Xuân</h1>
                             <div class="d-inline-block border-top border-bottom border-light py-3 px-4">
                                 <h3 class="text-uppercase font-weight-bold
-                                 text-white m-0" style="letter-spacing: 2px;">Nhà trai: 02/11/2024 <br> Nhà gái: 28/10/2024</h3>
+                                 text-white m-0" style="letter-spacing: 2px;">Nhà trai: 10 giờ 00 ngày 02/11/2024 
+                                 <br> <h2 class="text-uppercase font-weight-normal text-white m-3" style="letter-spacing: 1px;" id="timer"></h2>
+                                 </h3>
+                                 <h3 class="text-uppercase font-weight-bold
+                                 text-white m-0" style="letter-spacing: 2px;">Nhà gái: 11 giờ 00 ngày 28/10/202 
+                                 <br> <h2 class="text-uppercase font-weight-normal text-white m-3" style="letter-spacing: 2px;" id="timer1"></h2>
+                                  </h3>
                             </div>
-                            <h2 class="text-uppercase font-weight-normal text-white m-3" style="letter-spacing: 2px;" id="timer"></h2>
+                            
+                            
+                                
+                            
                             <!-- <button type="button" class="btn-play mx-auto" data-toggle="modal"
                                 data-src="https://www.youtube.com/embed/WN64v62I6aQ" data-target="#videoModal">
                                 <span></span>
@@ -392,11 +542,11 @@
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-outline-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
+    
     <script>
         // Set the date we're counting down to
         var countDownDate = new Date("Nov 02, 2024 10:00:00").getTime();
-  
+        var countDownDate1 = new Date("oct 28, 2024 11:00:00").getTime();
         // Update the count down every 1 second
         var x = setInterval(function() {
   
@@ -405,16 +555,22 @@
   
           // Find the distance between now and the count down date
           var distance = countDownDate - now;
+          var distance1 = countDownDate1 - now;
   
           // Time calculations for days, hours, minutes and seconds
           var days = Math.floor(distance / (1000 * 60 * 60 * 24));
           var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
           var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          var days1 = Math.floor(distance1 / (1000 * 60 * 60 * 24));
+          var hours1 = Math.floor((distance1 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          var minutes1 = Math.floor((distance1 % (1000 * 60 * 60)) / (1000 * 60));
+          var seconds1 = Math.floor((distance1 % (1000 * 60)) / 1000);
   
           // Display the result in the element with id="timer"
-          document.getElementById("timer").innerHTML = days + " ngày " + hours + " giờ " + minutes + " phút " + seconds + " giây";
-  
+          document.getElementById("timer").innerHTML = days + " ngày " + hours + ":" + minutes + ":" + seconds + "";
+          document.getElementById("timer1").innerHTML = days1 + " ngày " + hours1 + ":" + minutes1 + ":" + seconds1 + "";
           // If the count down is finished, write some text
           if (distance < 0) {
             clearInterval(x);
