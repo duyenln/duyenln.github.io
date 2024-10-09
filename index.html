@@ -599,6 +599,18 @@ function set_width() {
                     audio.play();        // Tiếp tục phát audio
                 }
             });
+
+            var touchArea = document.body;
+
+            // Sự kiện khi chạm vào khu vực
+            touchArea.addEventListener("touchstart", function(e) {
+
+                var audio = document.getElementById("myAudio");
+                if (audio.muted) {
+                    audio.muted = false; // Bỏ chế độ im lặng
+                    audio.play();        // Tiếp tục phát audio
+                }
+            });
         </script>
 
     <!-- JavaScript Libraries -->
